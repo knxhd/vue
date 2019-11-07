@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../lib/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <div>
+        <label>id:
+            <input type="text" name="id" v-model="id">
+        </label>
+        <label>name:
+            <input type="text" name="text" v-model="name">
+        </label>
+        <label>
+            <input type="button" value="最开始插入数据" @click="addHeader">
+            <input type="button" value="添加" @click="add">
+        </label>
+    </div>
+    <!-- 如果不声明key值，则在最开始插入数据时，选中的值没有办法判断是选中的哪一个，只能根据索引判断
+    想要看效果，可以将key值去掉，选中任意一条数据，点击最开始插入数据按钮，注意看选中的元素的变化-->
+    <div v-for="(item,key) in list" :key="item.id">
+        <input type="checkbox">
+        {{item.id+"-"+item.name}}
+    </div>
+</div>
+<script type="text/javascript">
+    new Vue({
+        el: '#app',
+        data: {
+            list: [
+                {id: 1, name: '周星驰'},
+                {id: 2, name: '成龙'},
+                {id: 3, name: '周润发'},
+                {id: 4, name: '李连杰'},
+                {id: 5, name: '甄子丹'},
+            ],
+            id: null,
+            name: '',
+        },
+        methods: {
+            add() {
+                this.list.push({id: this.id, name: this.name});
+            },
+            //作用是在数组的第一个位置插入数据
+            addHeader() {
+                this.list.unshift({id: this.id, name: this.name});
+            },
+        },
+    });
+</script>
+</body>
+</html>
