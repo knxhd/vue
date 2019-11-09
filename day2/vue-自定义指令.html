@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../lib/vue.js"></script>
+    <!--https://v3.bootcss.com-->
+    <link rel="stylesheet" href="../lib/bootstrap.min.css">
+</head>
+<body>
+<div id="app">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="id">id</label>
+                    <input type="text" v-model="id" class="form-control" id="id" placeholder="请输入ID">
+                </div>
+                <div class="form-group">
+                    <label for="name">name</label>
+                    <input type="text" v-model="name" class="form-control" id="name" placeholder="请输入名字">
+                </div>
+                <input type="button" @click="add" class="btn btn-primary" value="添加"/>
+                <div class="form-group">
+                    <label>名字</label>
+                    <input type="text" v-model="searchName" class="form-control" id="searchName" placeholder="请输入名字">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <table class="table table-hover">
+                <tr class="active" v-for="(item, key) in search(searchName)" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.date | dateFilter('date')}}</td>
+                    <td><a @click.prevent="del(item.id)">删除</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //定义全局过滤器
+    Vue.filter('dateFilter', function(data,dateType) {
+        let y = data.getFullYear();
+        let m = data.getMonth() < 10 ? '0' + (data.getMonth() + 1) : data.getMonth() + 1;
+        let d = data.getDate() < 10 ? '0' + (data.getDate()) : data.getDate();
+        let h = data.getHours() < 10 ? '0' + data.getHours() : data.getHours();
+        let min = data.getMinutes() < 10 ? '0' + data.getMinutes() : data.getMinutes();
+        let s = data.getSeconds() < 10 ? '0' + data.getSeconds() : data.getSeconds();
+        switch (dateType) {
+            case "date":
+                return y + '-' + m + '-' + d;
+            case 'dateTime':
+                return y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s;
+            case 'time':
+                return h + ':' + min + ':' + s;
+        }
+        return y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s;
+    });
+    new Vue({
+        el: '#app',
+        data: {
+            list: [
+                {id: 1, name: '周星驰', date: new Date()},
+                {id: 2, name: '周杰伦', date: new Date()},
+                {id: 3, name: '成龙', date: new Date()},
+                {id: 4, name: '李连杰', date: new Date()},
+                {id: 5, name: '周润发', date: new Date()},
+                {id: 6, name: '汤姆 克鲁斯', date: new Date()},
+                {id: 7, name: '史蒂芬 斯皮尔伯格', date: new Date()},
+            ],
+            id: null,
+            name: '',
+            searchName: '',
+        },
+        filters:{
+            privateDateFilter(data,dateType){
+                let y = data.getFullYear();
+                let m = data.getMonth() < 10 ? '0' + (data.getMonth() + 1) : data.getMonth() + 1;
+                let d = data.getDate() < 10 ? '0' + (data.getDate()) : data.getDate();
+                let h = data.getHours() < 10 ? '0' + data.getHours() : data.getHours();
+                let min = data.getMinutes() < 10 ? '0' + data.getMinutes() : data.getMinutes();
+                let s = data.getSeconds() < 10 ? '0' + data.getSeconds() : data.getSeconds();
+                switch (dateType) {
+                    case "date":
+                        return y + '-' + m + '-' + d;
+                    case 'dateTime':
+                        return y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s;
+                    case 'time':
+                        return h + ':' + min + ':' + s;
+                }
+                return y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s;
+            },
+            privateDateFilter2:function(data,dateType){
+                let y = data.getFullYear();
+                let m = data.getMonth() < 10 ? '0' + (data.getMonth() + 1) : data.getMonth() + 1;
+                let d = data.getDate() < 10 ? '0' + (data.getDate()) : data.getDate();
+                let h = data.getHours() < 10 ? '0' + data.getHours() : data.getHours();
+                let min = data.getMinutes() < 10 ? '0' + data.getMinutes() : data.getMinutes();
+                let s = data.getSeconds() < 10 ? '0' + data.getSeconds() : data.getSeconds();
+                switch (dateType) {
+                    case "date":
+                        return y + '-' + m + '-' + d;
+                    case 'dateTime':
+                        return y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s;
+                    case 'time':
+                        return h + ':' + min + ':' + s;
+                }
+                return y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s;
+            }
+        },
+        methods: {
+            add() {
+                console.log(this.list.find((item, index) => {
+                    return item.id === 1;
+                }));
+                console.log(this.list.findIndex((item, index) => {
+                    return item.id === 5;
+                }));
+                if (this.id === null || this.name === '') {
+                    alert('ID和name不能为空！');
+                    return;
+                }
+                if (this.list.filter((item) => {
+                    if (item.id === this.id) {
+                        return true;
+                    }
+                })) {
+                    alert('ID已经存在!');
+                    return;
+                }
+                this.list.push({id: this.id, name: this.name, date: new Date()});
+            },
+            del(id) {
+                this.list.forEach((item, index) => {
+                    if (item.id === id) {
+                        this.list.splice(index, 1);
+                    }
+                });
+            },
+            search(name) {
+                if (name === '') {
+                    return this.list;
+                }
+                return this.list.filter((item, index) => {
+                    /*  if (item.name.indexOf(name) > -1){
+                          return item;
+                      }*/
+                    if (item.name.includes(name)) {
+                        return item;
+                    }
+                });
+            },
+        },
+    });
+</script>
+</body>
+</html>
